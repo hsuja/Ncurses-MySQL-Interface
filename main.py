@@ -61,6 +61,7 @@ def draw_tableContent(list, cur_page, window, widths, num_columns):
      window.move(0, 0)
 
 def create_user(stdscr):
+	
 	#Allow user to see typed text
 	curses.echo()
 
@@ -107,6 +108,7 @@ def create_user(stdscr):
 	return
 
 def create_db(stdscr, db):
+	
 	#Allow user to see typed text
 	curses.echo()
 
@@ -143,6 +145,7 @@ def create_db(stdscr, db):
 	return
 
 def create_table(stdscr, db, db_name):
+	
 	#Allow user to see typed text
 	curses.echo()
 
@@ -161,7 +164,6 @@ def create_table(stdscr, db, db_name):
 	stdscr.move(19, 15)
 	primary_key_used = False
 
-	
 	col_names = []
 	data_types = []
 	data_type_sizes = []
@@ -176,6 +178,7 @@ def create_table(stdscr, db, db_name):
 			y_offset += 1
 			curses.echo()
 			stdscr.refresh()
+			
 			#store strings for column to be made
 			stdscr.addstr(19, 14, "                                                                   ")
 			stdscr.addstr(19, 2, "Column Name:")
@@ -196,6 +199,7 @@ def create_table(stdscr, db, db_name):
 			stdscr.refresh()
 			options.append(stdscr.getstr())
 			stdscr.addstr(19, 2, "                                                                    ")
+			
 			#update view with added column
 			stdscr.addstr(y_offset, x_offset, "COL" + str(count + 1) + ": " + col_names[count] + " " + data_types[count] + "(" + data_type_sizes[count] + ") " + options[count])
 			stdscr.refresh()
@@ -283,31 +287,26 @@ def db_overview(stdscr, db):
      #draw list
      draw_list(db_list, cur_page, list_win)
 	  
-
      stdscr.addstr(22, 2, "U - USE    D - DROP    C - CREATE NEW DATABASE        Q - QUIT")
      stdscr.refresh()
      list_win.refresh()
      
      #handle key presses
-
      while 1:
 	  input = list_win.getch()
 	  cur_pos = list_win.getyx()
-	  #stdscr.addstr(1,1, str(input))
+	  
 	  if input == curses.KEY_UP:
 	       if cur_pos[0] > 0:
 		    list_win.move(cur_pos[0] - 1, cur_pos[1])
 	  elif input == curses.KEY_DOWN: 
 	       if cur_pos[0] < 9 and cur_pos[0] < (len(db_list) - (cur_page - 1) * 10) - 1:
 		    list_win.move(cur_pos[0] + 1, cur_pos[1])
-	       
 	  elif input == curses.KEY_LEFT:
 	       if cur_page > 1:
 		    cur_page -= 1
 		    list_win.erase()
 		    draw_list(db_list, cur_page, list_win)
-
-
 	  elif input == curses.KEY_RIGHT:
 	       if cur_page < num_pages:
 		    cur_page += 1
@@ -338,8 +337,6 @@ def db_overview(stdscr, db):
 	  stdscr.refresh()
 	  list_win.refresh()
     
-     
-
 
 def table_overview(stdscr, db, db_name):
 
@@ -365,8 +362,7 @@ def table_overview(stdscr, db, db_name):
 	  if i == 10:
 	       page_num += 1
 	       i = 0
-     
-     
+    
      #10 listings per page
      num_pages = math.ceil(len(table_list) / 10.0)
 
@@ -384,7 +380,6 @@ def table_overview(stdscr, db, db_name):
      list_win.refresh()
      
      #handle key presses
-
      while 1:
 	  input = list_win.getch()
 	  cur_pos = list_win.getyx()
@@ -405,9 +400,7 @@ def table_overview(stdscr, db, db_name):
 		    cur_page += 1
 		    list_win.erase()
 		    draw_list(table_list, cur_page, list_win)
-	       
-	  elif input == ord('v'):
-	       #view
+	  elif input == ord('v'): #view table
 	       table_name = get_name(table_list, cur_page, cur_pos[0])
 	       table_contents(stdscr, db, db_name, table_name)
 	       return
@@ -422,15 +415,12 @@ def table_overview(stdscr, db, db_name):
 	       else:
 		    table_overview(stdscr, db, db_name)
 		    return
-	  elif input == ord('c'): 
+	  elif input == ord('c'): #create table
 	       create_table(stdscr, db, db_name)
 	       return
-	  elif input == ord('b'):
-	       #back
+	  elif input == ord('b'): #go back
 	       db_overview(stdscr, db)
-	       
-	  elif input == ord('q'):
-	       #quit
+	  elif input == ord('q'): #quit
 	       curses.endwin()
 	       exit()
 
@@ -485,12 +475,6 @@ def table_contents(stdscr, db, db_name, table_name):
      stdscr.border(0)
      stdscr.addstr(4, 34, "CONTENTS IN " + table_name, curses.A_STANDOUT)
 
-     #test print
-     #stdscr.addstr(1,1, str(table_desc))
-     #stdscr.addstr(2,1, str(var_list))
-     #stdscr.addstr(2,1, str(data))
-     #stdscr.addstr(2,1, str(var_lengths))
-
      contents_list = []
      i = 0
      for x in data:
@@ -537,11 +521,6 @@ def table_contents(stdscr, db, db_name, table_name):
 	  num_columns = j
 	  j += 1
 
-     #test print
-     #stdscr.addstr(3,1, str(field_lengths))
-     #stdscr.addstr(4,1, str(max_widths))
-     #stdscr.addstr(5,1, "num_columns=" + str(num_columns))
-     
      draw_tableContent(contents_list, cur_page, list_win, max_widths, num_columns)
 
      header = ""
@@ -715,12 +694,8 @@ def main(stdscr):
 	if db.cursor():
 		stdscr.addstr(20, 30, "Connected!")
 		db_overview(stdscr, db)
-
-	#incorrect credentials produce ugly traceback. does not fail gracefully.
 	else:
 		stdscr.addstr(20, 30, "Connection failed.")
-	
-	#stdscr.addstr(21, 30, "", curses.A_BLINK)
 	
 	db.close()
 
