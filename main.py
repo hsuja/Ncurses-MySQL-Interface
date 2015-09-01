@@ -496,7 +496,6 @@ def table_contents(stdscr, db, db_name, table_name):
 	       page_num += 1
 	       i = 0
     
-
      for i in range(len(var_list)):
 	  max_widths[i] = max(var_lengths[i], field_lengths[i]) + 1
 
@@ -564,6 +563,7 @@ def table_contents(stdscr, db, db_name, table_name):
 	       curses.echo()
 	       query = "INSERT INTO " + table_name + "("
 	       stdscr.addstr(19, 2, "Add Row:")
+	       
 	       new_fields = []
 	       i = 1
 	       for x in var_list:
@@ -574,8 +574,8 @@ def table_contents(stdscr, db, db_name, table_name):
 		    new_fields.append(stdscr.getstr())
 		    stdscr.addstr(20, 2, "                                                                   ")
 		    i += 1
-		    #stdscr.addstr(1,1, str(new_fields))
 	       query += ") VALUES ("
+	       
 	       i = 1
 	       for x in new_fields:
 		    query += "'" + x + "'"
@@ -588,8 +588,7 @@ def table_contents(stdscr, db, db_name, table_name):
 	       db.commit()
 	       table_contents(stdscr, db, db_name, table_name)
 	       return
-	  elif input == ord('e'):
-	       #edit
+	  elif input == ord('e'): #edit
 	       curses.echo()
 	       query = "UPDATE " + table_name + " SET "
 	       stdscr.addstr(19, 2, "Update Row:")
@@ -603,12 +602,10 @@ def table_contents(stdscr, db, db_name, table_name):
 			 query += ", "
 		    stdscr.addstr(20, 2, "                                                                   ")
 		    i += 1
-		    #stdscr.addstr(1,1, str(new_fields))
 	       
 	       first_field = get_field(contents_list, cur_page, cur_pos[0])
 	       
 	       query += " WHERE " + var_list[0] + " = '" + str(first_field) + "'"
-	       #stdscr.addstr(2,1, "query= " + query)
 	       cursor.execute(query)
 	       db.commit()
 	       table_contents(stdscr, db, db_name, table_name)
