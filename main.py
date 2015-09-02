@@ -685,7 +685,7 @@ def main(stdscr):
 	curses.noecho()
 	password_db = win.getstr()
 	curses.curs_set(0)
-	hostname_db = "45.49.78.62"
+	hostname_db = "xxx.xxx.xxx.xxx" #insert hostname
 
 	db = MySQLdb.connect(host=hostname_db, user=username_db, passwd=password_db)
 	if db.cursor():
