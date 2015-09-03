@@ -583,6 +583,7 @@ def table_contents(stdscr, db, db_name, table_name):
 			 query += ", "
 		    i += 1
 	       query += ")"
+	       
 	       stdscr.addstr(2,1, "query= " + query)
 	       cursor.execute(query)
 	       db.commit()
@@ -593,6 +594,7 @@ def table_contents(stdscr, db, db_name, table_name):
 	       query = "UPDATE " + table_name + " SET "
 	       stdscr.addstr(19, 2, "Update Row:")
 	       new_fields = []
+	       
 	       i = 1
 	       for x in var_list:
 		    query += x + "="
@@ -616,6 +618,7 @@ def table_contents(stdscr, db, db_name, table_name):
 	       query += var_list[0] + " =  '" + str(first_field) + "'"
 	       query += " LIMIT 1"
 	       stdscr.addstr(21, 2, "Execute " + query + " (y/n)?")
+	       
 	       res = stdscr.getch()
 	       if res == ord('y'):
 		    cursor.execute(query)
@@ -649,7 +652,6 @@ def main(stdscr):
 	stdscr.addstr(22, 2, "E - EXISTING USER    N - NEW USER")
 	stdscr.addstr(12, 28, "EXISTING USER or NEW USER?")
 
-
 	res = None
 	while 1:
 	     res = stdscr.getch()
@@ -662,26 +664,26 @@ def main(stdscr):
 		  curses.curs_set(1)
 		  create_user(stdscr)
 		  return
-
-
+		  
 	begin_x = 22
 	begin_y = 8
 	height = 10
 	width = 40
 	win = curses.newwin(height, width, begin_y, begin_x)
-
 	win.border(0)
-	
 	win.addstr(0, 0, "ENTER LOGIN CREDENTIALS")
 	win.addstr(3, 8, "Username: ")
 	win.addstr(5, 8, "Password: ")
 	win.move(3, 18)
+	
 	stdscr.refresh()
 	win.refresh()
 
 	username_db = win.getstr()
 	win.move(5, 18)
+	
 	win.refresh()
+	
 	curses.noecho()
 	password_db = win.getstr()
 	curses.curs_set(0)
